@@ -3,6 +3,9 @@
 Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines )
         : airportGraph(airportGraph), airlines(airlines) {}
 
+
+
+
 int Statistics::getTotalNumberOfAirports() const {
     return airportGraph.getNumVertex();
 }
@@ -21,6 +24,9 @@ int Statistics::getTotalNumberOfFlights() const {
 
     return totalFlights;
 }
+
+
+
 
 
 long Statistics::getNumberOfUniqueAirlinesFromAirport(const std::string &airportCode) const {
@@ -46,4 +52,57 @@ long Statistics::getNumberOfFlightsFromAirport(const std::string &airportCode) c
     }
     return count;
 }
+
+
+
+
+
+
+std::map<std::pair<std::string, std::string>, long> Statistics::getNumberOfFlightsPerCityAirline() const {
+    std::map<std::pair<std::string, std::string>, long> cityAirlineFlights;
+
+    for (const auto* vertex : airportGraph.getVertexSet()) {
+        std::string city = vertex->getInfo().getCity();
+        for (const auto& edge : vertex->getAdj()) {
+            for (const auto& flight : edge.getFlights()) {
+                std::string airline = flight.getAirline();
+                std::pair<std::string, std::string> cityAirlinePair = std::make_pair(city, airline);
+                cityAirlineFlights[cityAirlinePair]++;
+            }
+        }
+    }
+
+    return cityAirlineFlights;
+}
+
+std::map<std::string, long> Statistics::getNumberOfFlightsPerCity() const {
+    std::map<std::string, long> cityFlights;
+
+    for (const auto* vertex : airportGraph.getVertexSet()) {
+        std::string city = vertex->getInfo().getCity();
+        for (const auto& edge : vertex->getAdj()) {
+            for (const auto& flight : edge.getFlights()) {
+                cityFlights[city]++;
+            }
+        }
+    }
+
+    return cityFlights;
+}
+
+std::map<std::string, long> Statistics::getNumberOfFlightsPerAirline() const {
+    std::map<std::string, long> airlineFlights;
+
+    for (const auto* vertex : airportGraph.getVertexSet()) {
+        for (const auto& edge : vertex->getAdj()) {
+            for (const auto& flight : edge.getFlights()) {
+                std::string airline = flight.getAirline();
+                airlineFlights[airline]++;
+            }
+        }
+    }
+
+    return airlineFlights;
+}
+
 

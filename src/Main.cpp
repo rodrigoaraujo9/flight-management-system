@@ -43,6 +43,25 @@ int main() {
         std::cout << "Airport " << airportCode << " not found." << std::endl;
     }
 
+    auto cityAirlineFlights = stats.getNumberOfFlightsPerCityAirline();
+    for (const auto& entry : cityAirlineFlights) {
+        std::cout << "City: " << entry.first.first << ", Airline: " << entry.first.second
+                  << ", Number of Flights: " << entry.second << std::endl;
+    }
+
+    auto flightsPerCity = stats.getNumberOfFlightsPerCity();
+    std::cout << "Flights per City:" << std::endl;
+    for (const auto& [city, count] : flightsPerCity) {
+        std::cout << city << ": " << count << std::endl;
+    }
+
+    auto flightsPerAirline = stats.getNumberOfFlightsPerAirline();
+    std::cout << "\nFlights per Airline:" << std::endl;
+    for (const auto& [airline, count] : flightsPerAirline) {
+        std::cout << airline << ": " << count << std::endl;
+    }
+
+
     // Add more tests as needed for other functionalities
 
     return 0;

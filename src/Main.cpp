@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include "Read.h"
+#include "Statistics.h"
 #include "Airport.h"
 #include "Airline.h"
 #include "Flight.h"
@@ -14,29 +15,36 @@ int main() {
     Read reader;
     std::string ref = "../dataset/";
     // Read data from files
-    reader.readAirports(airportGraph, ref+"airports.csv");
-    reader.readAirlines(airlines, ref+"airlines.csv");
-    reader.readFlights(airportGraph, flights, ref+"flights.csv");
+    reader.readAirports(airportGraph, ref + "airports.csv");
+    reader.readAirlines(airlines, ref + "airlines.csv");
+    reader.readFlights(airportGraph, flights, ref + "flights.csv");
 
-    // Test: Output the number of airports, airlines, and flights
+    // Initialize Statistics instance
+    Statistics stats(airportGraph, airlines);
+
+    // Output the number of airports, airlines, and total flights
     std::cout << "Number of airports: " << airportGraph.getNumVertex() << std::endl;
     std::cout << "Number of airlines: " << airlines.size() << std::endl;
-    std::cout << "Number of flights: " << flights.size() << std::endl;
+    std::cout << "Total number of flights: " << stats.getTotalNumberOfFlights() << std::endl;
 
-    // Additional test: Check for a specific airport or flight
-    // Example: Check if a flight exists between two airports
-    std::string sourceAirportCode = "JFK";
-    std::string destAirportCode = "LAX";
-    Edge<Airport>* edge = airportGraph.getEdge(Airport(sourceAirportCode), Airport(destAirportCode));
-
-    if (edge != nullptr) {
-        std::cout << "Number of flights from " << sourceAirportCode << " to " << destAirportCode
-                  << ": " << edge->getWeight() << std::endl;
+    // Test: Number of flights from a specific airport
+    std::string airportCode = "JFK";
+    long numberOfFlightsFromAirport = stats.getNumberOfFlightsFromAirport(airportCode);
+    if (numberOfFlightsFromAirport != -1) {
+        std::cout << "Number of flights from " << airportCode << ": " << numberOfFlightsFromAirport << std::endl;
     } else {
-        std::cout << "No flights from " << sourceAirportCode << " to " << destAirportCode << std::endl;
+        std::cout << "Airport " << airportCode << " not found." << std::endl;
     }
 
-    // ... Other tests can be added as needed
+    // Test: Number of unique airlines from a specific airport
+    long numberOfUniqueAirlinesFromAirport = stats.getNumberOfUniqueAirlinesFromAirport(airportCode);
+    if (numberOfUniqueAirlinesFromAirport != -1) {
+        std::cout << "Number of unique airlines from " << airportCode << ": " << numberOfUniqueAirlinesFromAirport << std::endl;
+    } else {
+        std::cout << "Airport " << airportCode << " not found." << std::endl;
+    }
+
+    // Add more tests as needed for other functionalities
 
     return 0;
 }

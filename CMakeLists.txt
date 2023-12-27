@@ -15,4 +15,6 @@ add_executable(Project_2_AED
         src/Read.h
         src/Read.cpp
         src/Graph.h
-        src/Main.cpp)
+        src/Main.cpp
+        src/Statistics.h
+        src/Statistics.cpp)

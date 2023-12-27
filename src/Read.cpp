@@ -58,7 +58,6 @@ void Read::readFlights(Graph<Airport>& airportGraph, std::unordered_set<Flight>&
         getline(ss, airline);
 
         Flight flight(sourceCode, targetCode, airline);
-        flights.insert(flight); // Insert into unordered_set
 
         auto sourceVertex = airportGraph.findVertex(Airport(sourceCode));
         auto targetVertex = airportGraph.findVertex(Airport(targetCode));
@@ -66,9 +65,11 @@ void Read::readFlights(Graph<Airport>& airportGraph, std::unordered_set<Flight>&
         if (sourceVertex && targetVertex) {
             Edge<Airport>* edge = airportGraph.getEdge(Airport(sourceCode), Airport(targetCode));
             if (edge) {
-                edge->setWeight(edge->getWeight() + 1);
+                edge->addFlight(flight);
             } else {
                 airportGraph.addEdge(Airport(sourceCode), Airport(targetCode), 1);
+                edge = airportGraph.getEdge(Airport(sourceCode), Airport(targetCode));
+                edge->addFlight(flight);
             }
         }
     }

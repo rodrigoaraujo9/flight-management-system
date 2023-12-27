@@ -6,6 +6,8 @@
 #include <queue>
 #include <stack>
 #include <list>
+#include <Flight.h>
+#include <unordered_set>
 
 using namespace std;
 
@@ -58,14 +60,20 @@ template <class T>
 class Edge {
     Vertex<T> * dest;      // destination vertex
     double weight;         // edge weight
+    std::unordered_set<Flight> flights;
 public:
     Edge(Vertex<T> *d, double w);
     Vertex<T> *getDest() const;
     void setDest(Vertex<T> *dest);
     double getWeight() const;
     void setWeight(double weight);
+    void addFlight(const Flight& flight);
     friend class Graph<T>;
     friend class Vertex<T>;
+
+    const std::unordered_set<Flight>& getFlights() const {
+        return flights;
+    }
 };
 
 template <class T>
@@ -95,6 +103,7 @@ public:
 
 /****************** Provided constructors and functions ********************/
 
+
 template <class T>
 Edge<T>* Graph<T>::getEdge(const T &source, const T &dest) {
     Vertex<T> *src = findVertex(source);
@@ -116,6 +125,11 @@ Vertex<T>::Vertex(T in): info(in) {}
 template <class T>
 Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
 
+template <class T>
+void Edge<T>::addFlight(const Flight& flight) {
+    flights.insert(flight);
+    weight = flights.size(); // Optionally, you can keep the weight updated as the count of flights
+}
 
 template <class T>
 int Graph<T>::getNumVertex() const {

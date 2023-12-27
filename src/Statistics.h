@@ -29,6 +29,9 @@ public:
     std::map<std::pair<std::string, std::string>, long> getNumberOfFlightsPerCityAirline() const;
     std::map<std::string, long> getNumberOfFlightsPerCity() const;
     std::map<std::string, long> getNumberOfFlightsPerAirline() const;
+    //IV
+    long getNumberOfDiffCountriesByAirport(const std::string& airportCode) const;
+    long getNumberOfDiffCountriesByCity(const std::string& city) const;
 };
 
 #endif // STATISTICS_H

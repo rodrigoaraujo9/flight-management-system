@@ -6,6 +6,7 @@ Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>
 
 
 
+
 int Statistics::getTotalNumberOfAirports() const {
     return airportGraph.getNumVertex();
 }
@@ -106,3 +107,32 @@ std::map<std::string, long> Statistics::getNumberOfFlightsPerAirline() const {
 }
 
 
+
+
+long Statistics::getNumberOfDiffCountriesByAirport(const std::string& airportCode) const{
+
+    const auto* airportVertex = airportGraph.findVertex(Airport(airportCode));
+    if (!airportVertex) return -1;
+
+    std::unordered_set<std::string> uniqueCountries;
+    for (const auto& edge : airportVertex->getAdj()) {
+        const auto* destAirportVertex = edge.getDest();
+        uniqueCountries.insert(destAirportVertex->getInfo().getCountry());
+    }
+
+    return uniqueCountries.size();
+}
+
+long Statistics::getNumberOfDiffCountriesByCity(const std::string& city) const{
+    std::unordered_set<std::string> uniqueCountries;
+    for(const auto* airportVertex : airportGraph.getVertexSet()){
+        if(airportVertex->getInfo().getCity()==city){
+            for (const auto& edge : airportVertex->getAdj()) {
+                const auto* destAirportVertex = edge.getDest();
+                uniqueCountries.insert(destAirportVertex->getInfo().getCountry());
+            }
+        }
+
+    }
+    return uniqueCountries.size();
+}

@@ -26,40 +26,16 @@ int main() {
     std::cout << "Number of airlines: " << airlines.size() << std::endl;
     std::cout << "Total number of flights: " << stats.getTotalNumberOfFlights() << std::endl;
 
-    // Test: Number of flights from a specific airport
-    std::string airportCode = "JFK";
-    long numberOfFlightsFromAirport = stats.getNumberOfFlightsFromAirport(airportCode);
-    if (numberOfFlightsFromAirport != -1) {
-        std::cout << "Number of flights from " << airportCode << ": " << numberOfFlightsFromAirport << std::endl;
-    } else {
-        std::cout << "Airport " << airportCode << " not found." << std::endl;
-    }
 
-    // Test: Number of unique airlines from a specific airport
-    long numberOfUniqueAirlinesFromAirport = stats.getNumberOfUniqueAirlinesFromAirport(airportCode);
-    if (numberOfUniqueAirlinesFromAirport != -1) {
-        std::cout << "Number of unique airlines from " << airportCode << ": " << numberOfUniqueAirlinesFromAirport << std::endl;
-    } else {
-        std::cout << "Airport " << airportCode << " not found." << std::endl;
-    }
+    // Test: Number of different countries from a specific airport
+    std::string airportCode = "JFK"; // Example airport code
+    long countriesFromAirport = stats.getNumberOfDiffCountriesByAirport(airportCode);
+    std::cout << "Number of different countries from " << airportCode << ": " << countriesFromAirport << std::endl;
 
-    auto cityAirlineFlights = stats.getNumberOfFlightsPerCityAirline();
-    for (const auto& entry : cityAirlineFlights) {
-        std::cout << "City: " << entry.first.first << ", Airline: " << entry.first.second
-                  << ", Number of Flights: " << entry.second << std::endl;
-    }
-
-    auto flightsPerCity = stats.getNumberOfFlightsPerCity();
-    std::cout << "Flights per City:" << std::endl;
-    for (const auto& [city, count] : flightsPerCity) {
-        std::cout << city << ": " << count << std::endl;
-    }
-
-    auto flightsPerAirline = stats.getNumberOfFlightsPerAirline();
-    std::cout << "\nFlights per Airline:" << std::endl;
-    for (const auto& [airline, count] : flightsPerAirline) {
-        std::cout << airline << ": " << count << std::endl;
-    }
+    // Test: Number of different countries from a specific city
+    std::string city = "Paris"; // Example city name
+    long countriesFromCity = stats.getNumberOfDiffCountriesByCity(city);
+    std::cout << "Number of different countries from " << city << ": " << countriesFromCity << std::endl;
 
 
     // Add more tests as needed for other functionalities

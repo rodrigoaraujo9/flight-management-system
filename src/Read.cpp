@@ -4,7 +4,6 @@
 #include "Flight.h"
 #include <fstream>
 #include <sstream>
-#include <unordered_map>
 
 void Read::readAirlines(std::unordered_set<Airline>& airlines, const std::string& filename) {
     std::ifstream file(filename);
@@ -45,7 +44,7 @@ void Read::readAirports(Graph<Airport>& airportGraph, const std::string& filenam
     }
 }
 
-void Read::readFlights(Graph<Airport>& airportGraph, std::unordered_set<Flight>& flights, const std::string& filename) {
+void Read::readFlights(Graph<Airport>& airportGraph, const std::string& filename) {
     std::ifstream file(filename);
     std::string line;
     getline(file, line); // Skip header

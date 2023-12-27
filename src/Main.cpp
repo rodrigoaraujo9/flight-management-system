@@ -10,14 +10,13 @@
 int main() {
     Graph<Airport> airportGraph;
     std::unordered_set<Airline> airlines;
-    std::unordered_set<Flight> flights;
 
     Read reader;
     std::string ref = "../dataset/";
     // Read data from files
     reader.readAirports(airportGraph, ref + "airports.csv");
     reader.readAirlines(airlines, ref + "airlines.csv");
-    reader.readFlights(airportGraph, flights, ref + "flights.csv");
+    reader.readFlights(airportGraph, ref + "flights.csv");
 
     // Initialize Statistics instance
     Statistics stats(airportGraph, airlines);

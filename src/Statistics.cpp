@@ -1,6 +1,6 @@
 #include "Statistics.h"
 
-Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines)
+Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines )
         : airportGraph(airportGraph), airlines(airlines) {}
 
 int Statistics::getTotalNumberOfAirports() const {

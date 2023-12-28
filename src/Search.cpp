@@ -30,7 +30,7 @@ std::vector<Airport> Search::findBestFlight(const std::string& source, const std
     for (const auto& srcAirport : sourceAirports) {
         for (const auto& destAirport : destinationAirports) {
             auto path = bfsFindPath(srcAirport, destAirport);
-            int stops = path.size() - 1; // Number of stops is one less than the number of airports in the path
+            int stops = path.size() - 1; // Num of stops is one less than the num of airports in the path
 
             if (stops < minStops) {
                 shortestPath = path;

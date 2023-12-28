@@ -122,7 +122,15 @@ std::map<std::string, long> Statistics::getNumberOfFlightsPerCity() const {
     return cityFlights;
 }
 
-
+/**
+ * @brief Calculates the number of flights per airline in the airport graph.
+ *
+ * This function iterates through the airport graph's edges and flights to count the number of flights operated by each airline.
+ *
+ * @return A map associating airline names with the number of flights they operate.
+ * @note This function assumes that the airport graph has been properly constructed.
+ *       Time complexity: O(V*E*F) where V is the number of vertices, E is the number of edges, and F is the average number of flights per edge.
+ */
 std::map<std::string, long> Statistics::getNumberOfFlightsPerAirline() const {
     std::map<std::string, long> airlineFlights;
 
@@ -221,6 +229,17 @@ std::unordered_set<std::string> Statistics::getReachableAirports(const std::stri
     return reachableAirports;
 }
 
+/**
+ * @brief Retrieves a set of reachable cities from the specified airport with a maximum number of stops.
+ *
+ * This function uses breadth-first search to find reachable cities within a certain number of stops from the given airport.
+ *
+ * @param airportCode The code of the starting airport.
+ * @param maxStops The maximum number of stops allowed in the search.
+ * @return An unordered set of reachable city names.
+ * @note This function assumes that the airport graph has been properly constructed.
+ *       Time complexity: O(V*(V+E)) where V is the number of vertices and E is the number of edges.
+ */
 std::unordered_set<std::string> Statistics::getReachableCities(const std::string& airportCode, int maxStops) const {
     std::unordered_set<std::string> reachableCities;
     std::queue<std::pair<Vertex<Airport>*, int>> q;
@@ -252,6 +271,17 @@ std::unordered_set<std::string> Statistics::getReachableCities(const std::string
     return reachableCities;
 }
 
+/**
+ * @brief Retrieves a set of reachable countries from the specified airport with a maximum number of stops.
+ *
+ * This function uses breadth-first search to find reachable countries within a certain number of stops from the given airport.
+ *
+ * @param airportCode The code of the starting airport.
+ * @param maxStops The maximum number of stops allowed in the search.
+ * @return An unordered set of reachable country names.
+ * @note This function assumes that the airport graph has been properly constructed.
+ *       Time complexity: O(V*(V+E)) where V is the number of vertices and E is the number of edges.
+ */
 std::unordered_set<std::string> Statistics::getReachableCountries(const std::string& airportCode, int maxStops) const {
     std::unordered_set<std::string> reachableCountries;
     std::queue<std::pair<Vertex<Airport>*, int>> q;

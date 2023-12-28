@@ -56,7 +56,7 @@ int main() {
 
     for (const auto& path : longestPaths) {
         for (const auto& airport : path) {
-            std::cout << airport.getCode() << " -> ";
+            std::cout << airport.getName() << " -> ";
         }
         std::cout << "End\n";
     }
@@ -65,14 +65,14 @@ int main() {
     auto topKAirports = stats.getTopKAirportsByFlights(k);
 
     for (const auto& [airport, flightCount] : topKAirports) {
-        std::cout << airport.getCode() << " has " << flightCount << " flights." << std::endl;
+        std::cout << airport.getName() << " has " << flightCount << " flights." << std::endl;
     }
 
     auto essentialAirports = stats.findEssentialAirports();
 
     std::cout << "Essential Airports:" << std::endl;
     for (const auto& airport : essentialAirports) {
-        std::cout << airport.getCode() << std::endl;
+        std::cout << airport.getName() << std::endl;
     }
 
     return 0;

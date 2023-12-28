@@ -12,6 +12,8 @@ public:
     Airport(const std::string &code, const std::string &name, const std::string &city,
             const std::string &country, double latitude, double longitude);
 
+    Airport(){};
+
     // Getters
     std::string getCode() const;
     std::string getName() const;

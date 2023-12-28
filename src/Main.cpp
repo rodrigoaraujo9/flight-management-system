@@ -1,11 +1,12 @@
 #include "Graph.h"
 #include "Read.h"
 #include "Statistics.h"
+#include "Search.h"
 #include "Airport.h"
 #include "Airline.h"
-#include "Flight.h"
 #include <iostream>
 #include <unordered_set>
+#include <string>
 
 int main() {
     Graph<Airport> airportGraph;
@@ -13,67 +14,46 @@ int main() {
 
     Read reader;
     std::string ref = "../dataset/";
-    // Read data from files
     reader.readAirports(airportGraph, ref + "airports.csv");
     reader.readAirlines(airlines, ref + "airlines.csv");
     reader.readFlights(airportGraph, ref + "flights.csv");
 
-    // Initialize Statistics instance
     Statistics stats(airportGraph, airlines);
+    Search search(airportGraph);
 
-    // Output the number of airports, airlines, and total flights
     std::cout << "Number of airports: " << airportGraph.getNumVertex() << std::endl;
     std::cout << "Number of airlines: " << airlines.size() << std::endl;
     std::cout << "Total number of flights: " << stats.getTotalNumberOfFlights() << std::endl;
 
-
-    // Test: Number of different countries from a specific airport
-    std::string airportCode = "JFK"; // Example airport code
-    long countriesFromAirport = stats.getNumberOfDiffCountriesByAirport(airportCode);
-    std::cout << "Number of different countries from " << airportCode << ": " << countriesFromAirport << std::endl;
-
-    // Test: Number of different countries from a specific city
-    std::string city = "Paris"; // Example city name
-    long countriesFromCity = stats.getNumberOfDiffCountriesByCity(city);
-    std::cout << "Number of different countries from " << city << ": " << countriesFromCity << std::endl;
-
-    //airport code is JFK
-    int maxStops = 2; // Maximum number of stops
-    // Test reachable airports from JFK within 2 stops
-    auto reachableAirports = stats.getReachableAirports(airportCode, maxStops);
-    std::cout << "Reachable airports from " << airportCode << " within " << maxStops << " stops: " << reachableAirports.size() << std::endl;
-
-    // Test reachable cities from JFK within 2 stops
-    auto reachableCities = stats.getReachableCities(airportCode, maxStops);
-    std::cout << "Reachable cities from " << airportCode << " within " << maxStops << " stops: " << reachableCities.size() << std::endl;
-
-    // Test reachable countries from JFK within 2 stops
-    auto reachableCountries = stats.getReachableCountries(airportCode, maxStops);
-    std::cout << "Reachable countries from " << airportCode << " within " << maxStops << " stops: " << reachableCountries.size() << std::endl;
-
-
-    auto longestPaths = stats.findLongestPath();
-
-    for (const auto& path : longestPaths) {
-        for (const auto& airport : path) {
-            std::cout << airport.getName() << " -> ";
-        }
-        std::cout << "End\n";
+    // Test: Find best flight using airport codes
+    std::string source = "JFK";
+    std::string destination = "THU";
+    std::cout << "Best flight path from " << source << " to " << destination << " using codes:" << std::endl;
+    auto bestFlights = search.findBestFlight(source, destination);
+    for (const auto& airport : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") -> ";
     }
+    std::cout << "End\n";
 
-    int k = 10; // Example: find top 10 airports
-    auto topKAirports = stats.getTopKAirportsByFlights(k);
-
-    for (const auto& [airport, flightCount] : topKAirports) {
-        std::cout << airport.getName() << " has " << flightCount << " flights." << std::endl;
+    // Test: Find best flight using city name
+    source = "New York";
+    destination = "Pituffik";
+    std::cout << "Best flight path from " << source << " to " << destination << " using city names:" << std::endl;
+    bestFlights = search.findBestFlight(source, destination);
+    for (const auto& airport : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") -> ";
     }
+    std::cout << "End\n";
 
-    auto essentialAirports = stats.findEssentialAirports();
-
-    std::cout << "Essential Airports:" << std::endl;
-    for (const auto& airport : essentialAirports) {
-        std::cout << airport.getName() << std::endl;
+    // Test: Find best flight using geographical coordinates
+    std::string sourceCoords = "40.6413111,-73.7781391";  // Coordinates for JFK
+    std::string destCoords = "76.531203,-68.703161";     // Coordinates for THU
+    std::cout << "Best flight path from " << sourceCoords << " to " << destCoords << " using coordinates:" << std::endl;
+    bestFlights = search.findBestFlight(sourceCoords, destCoords);
+    for (const auto& airport : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") -> ";
     }
+    std::cout << "End\n";
 
     return 0;
 }

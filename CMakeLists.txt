@@ -17,4 +17,8 @@ add_executable(Project_2_AED
         src/Graph.h
         src/Main.cpp
         src/Statistics.h
-        src/Statistics.cpp)
+        src/Statistics.cpp
+        src/Search.h
+        src/Search.cpp
+        src/Haversine.h
+        src/Haversine.cpp)

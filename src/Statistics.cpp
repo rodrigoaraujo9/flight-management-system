@@ -52,7 +52,7 @@ long Statistics::getNumberOfUniqueAirlinesFromAirport(const std::string &airport
 
     std::unordered_set<std::string> uniqueAirlines;
     for (const auto &edge: airportVertex->getAdj()) {
-        for (const auto &flight: edge.getFlights()) {  // Assuming Edge class has getFlights method
+        for (const auto &flight: edge.getFlights()) {
             uniqueAirlines.insert(flight.getAirline());
         }
     }
@@ -71,7 +71,7 @@ long Statistics::getNumberOfFlightsFromAirport(const std::string &airportCode) c
 
     long count = 0;
     for (const auto &edge: airportVertex->getAdj()) {
-        count += edge.getFlights().size();  // Assuming Edge class has getFlights method
+        count += edge.getFlights().size();
     }
     return count;
 }

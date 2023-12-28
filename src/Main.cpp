@@ -68,5 +68,12 @@ int main() {
         std::cout << airport.getCode() << " has " << flightCount << " flights." << std::endl;
     }
 
+    auto essentialAirports = stats.findEssentialAirports();
+
+    std::cout << "Essential Airports:" << std::endl;
+    for (const auto& airport : essentialAirports) {
+        std::cout << airport.getCode() << std::endl;
+    }
+
     return 0;
 }

@@ -15,8 +15,16 @@ private:
     Graph<Airport>& airportGraph;
     std::unordered_set<Airline>& airlines;
 
+    //AUX FUNCTIONS
     void resetVisited(Graph<Airport>& graph);
     void dfs(Vertex<Airport>* vertex, std::unordered_set<std::string>& visited, std::vector<Airport>& path, std::vector<std::vector<Airport>>& longestPaths, int& maxLength);
+    void findArticulationPoints(Vertex<Airport>* v, int& time,
+                                std::unordered_map<Airport, int, AirportHash, AirportEqual>& disc,
+                                std::unordered_map<Airport, int, AirportHash, AirportEqual>& low,
+                                std::unordered_map<Airport, Vertex<Airport>*, AirportHash, AirportEqual>& parent,
+                                std::unordered_set<Airport, AirportHash, AirportEqual>& articulationPoints);
+    Graph<Airport> createUndirectedCopy(const Graph<Airport>& directedGraph);
+
 
 public:
     Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines);
@@ -43,6 +51,9 @@ public:
     std::vector<std::vector<Airport>> findLongestPath();
     //VII
     std::vector<std::pair<Airport, int>> getTopKAirportsByFlights(int k);
+    //VIII
+    std::unordered_set<Airport, AirportHash, AirportEqual> findEssentialAirports();
+
 };
 
 #endif // STATISTICS_H

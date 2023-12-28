@@ -1,4 +1,5 @@
 #include "Statistics.h"
+#include <iostream>
 
 Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines )
         : airportGraph(airportGraph), airlines(airlines) {}
@@ -309,3 +310,77 @@ std::vector<std::pair<Airport, int>> Statistics::getTopKAirportsByFlights(int k)
     std::vector<std::pair<Airport, int>> topKAirports(airportFlightCounts.begin(), airportFlightCounts.begin() + k);
     return topKAirports;
 }
+
+
+
+void Statistics::findArticulationPoints(Vertex<Airport>* v, int& time,
+                                        std::unordered_map<Airport, int, AirportHash, AirportEqual>& disc,
+                                        std::unordered_map<Airport, int, AirportHash, AirportEqual>& low,
+                                        std::unordered_map<Airport, Vertex<Airport>*, AirportHash, AirportEqual>& parent,
+                                        std::unordered_set<Airport, AirportHash, AirportEqual>& articulationPoints) {
+    int children = 0;
+    v->setVisited(true);
+    disc[v->getInfo()] = low[v->getInfo()] = ++time;
+
+
+    for (auto& edge : v->getAdj()) {
+        Vertex<Airport>* child = edge.getDest();
+        if (!child->isVisited()) {
+            children++;
+            parent[child->getInfo()] = v;
+            findArticulationPoints(child, time, disc, low, parent, articulationPoints);
+            low[v->getInfo()] = std::min(low[v->getInfo()], low[child->getInfo()]);
+            if (parent[v->getInfo()] == nullptr && children > 1) {
+                articulationPoints.insert(v->getInfo());
+            }
+            }
+            if (parent[v->getInfo()] != nullptr && low[child->getInfo()] >= disc[v->getInfo()]) {
+                articulationPoints.insert(v->getInfo());
+            }
+            else if (child != parent[v->getInfo()]) {
+            low[v->getInfo()] = std::min(low[v->getInfo()], disc[child->getInfo()]);
+
+        }
+    }
+}
+
+std::unordered_set<Airport, AirportHash, AirportEqual> Statistics::findEssentialAirports() {
+    Graph<Airport> undirectedGraph = createUndirectedCopy(airportGraph);
+    std::unordered_set<Airport, AirportHash, AirportEqual> articulationPoints;
+    std::unordered_map<Airport, int, AirportHash, AirportEqual> disc, low;
+    std::unordered_map<Airport, Vertex<Airport>*, AirportHash, AirportEqual> parent;
+    int time = 0;
+
+    for (auto* vertex : undirectedGraph.getVertexSet()) {
+        disc[vertex->getInfo()] = -1;
+        low[vertex->getInfo()] = -1;
+        parent[vertex->getInfo()] = nullptr;
+    }
+
+    for (auto* vertex : undirectedGraph.getVertexSet()) {
+        if (disc[vertex->getInfo()] == -1) {
+            findArticulationPoints(vertex, time, disc, low, parent, articulationPoints);
+        }
+    }
+
+    for (auto* vertex : undirectedGraph.getVertexSet()) {
+        vertex->setVisited(false);
+    }
+    return articulationPoints;
+}
+
+Graph<Airport> Statistics::createUndirectedCopy(const Graph<Airport>& directedGraph) {
+    Graph<Airport> undirectedGraph;
+
+    for (auto* vertex : directedGraph.getVertexSet()) {
+        undirectedGraph.addVertex(vertex->getInfo());
+        for (auto& edge : vertex->getAdj()) {
+            Vertex<Airport>* dest = edge.getDest();
+            undirectedGraph.addEdge(vertex->getInfo(), dest->getInfo(), 1);
+            undirectedGraph.addEdge(dest->getInfo(), vertex->getInfo(), 1); // Add the reciprocal edge
+        }
+    }
+
+    return undirectedGraph;
+}
+

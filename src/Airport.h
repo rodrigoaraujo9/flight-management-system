@@ -41,4 +41,16 @@ private:
     double m_longitude;       // Longitude
 };
 
+struct AirportHash {
+    size_t operator()(const Airport& airport) const {
+        return std::hash<std::string>()(airport.getCode());
+    }
+};
+
+struct AirportEqual {
+    bool operator()(const Airport& lhs, const Airport& rhs) const {
+        return lhs.getCode() == rhs.getCode();
+    }
+};
+
 #endif // AIRPORT_H

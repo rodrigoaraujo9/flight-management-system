@@ -15,6 +15,9 @@ private:
     Graph<Airport>& airportGraph;
     std::unordered_set<Airline>& airlines;
 
+    void resetVisited(Graph<Airport>& graph);
+    void dfs(Vertex<Airport>* vertex, std::unordered_set<std::string>& visited, std::vector<Airport>& path, std::vector<std::vector<Airport>>& longestPaths, int& maxLength);
+
 public:
     Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines);
 
@@ -32,6 +35,14 @@ public:
     //IV
     long getNumberOfDiffCountriesByAirport(const std::string& airportCode) const;
     long getNumberOfDiffCountriesByCity(const std::string& city) const;
+    //V
+    std::unordered_set<std::string> getReachableAirports(const std::string& airportCode, int maxStops) const;
+    std::unordered_set<std::string> getReachableCities(const std::string& airportCode, int maxStops) const;
+    std::unordered_set<std::string> getReachableCountries(const std::string& airportCode, int maxStops) const;
+    //VI
+    std::vector<std::vector<Airport>> findLongestPath();
+    //VII
+    std::vector<std::pair<Airport, int>> getTopKAirportsByFlights(int k);
 };
 
 #endif // STATISTICS_H

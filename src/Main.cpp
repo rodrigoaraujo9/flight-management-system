@@ -37,8 +37,36 @@ int main() {
     long countriesFromCity = stats.getNumberOfDiffCountriesByCity(city);
     std::cout << "Number of different countries from " << city << ": " << countriesFromCity << std::endl;
 
+    //airport code is JFK
+    int maxStops = 2; // Maximum number of stops
+    // Test reachable airports from JFK within 2 stops
+    auto reachableAirports = stats.getReachableAirports(airportCode, maxStops);
+    std::cout << "Reachable airports from " << airportCode << " within " << maxStops << " stops: " << reachableAirports.size() << std::endl;
 
-    // Add more tests as needed for other functionalities
+    // Test reachable cities from JFK within 2 stops
+    auto reachableCities = stats.getReachableCities(airportCode, maxStops);
+    std::cout << "Reachable cities from " << airportCode << " within " << maxStops << " stops: " << reachableCities.size() << std::endl;
+
+    // Test reachable countries from JFK within 2 stops
+    auto reachableCountries = stats.getReachableCountries(airportCode, maxStops);
+    std::cout << "Reachable countries from " << airportCode << " within " << maxStops << " stops: " << reachableCountries.size() << std::endl;
+
+
+    auto longestPaths = stats.findLongestPath();
+
+    for (const auto& path : longestPaths) {
+        for (const auto& airport : path) {
+            std::cout << airport.getCode() << " -> ";
+        }
+        std::cout << "End\n";
+    }
+
+    int k = 10; // Example: find top 10 airports
+    auto topKAirports = stats.getTopKAirportsByFlights(k);
+
+    for (const auto& [airport, flightCount] : topKAirports) {
+        std::cout << airport.getCode() << " has " << flightCount << " flights." << std::endl;
+    }
 
     return 0;
 }

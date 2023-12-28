@@ -1,5 +1,9 @@
 #include "Search.h"
 
+/**
+ * @brief Constructs a new Search object.
+ * @param graph Reference to the graph of airports.
+ */
 Search::Search(const Graph<Airport>& graph) : graph(graph) {
     for (const auto& vertex : graph.getVertexSet()) {
         const Airport& airport = vertex->getInfo();
@@ -8,7 +12,13 @@ Search::Search(const Graph<Airport>& graph) : graph(graph) {
     }
 }
 
-
+/**
+ * @brief Finds the best flight path from the source to the destination.
+ * @param source The source location, which can be an airport code, city name, or coordinates.
+ * @param destination The destination location, similar to source.
+ * @return A vector of Airports representing the best flight path. Empty if no path is found.
+ * @note Time complexity: O(V + E) where V is the number of vertices (airports) and E is the number of edges (flights) in the graph.
+ */
 std::vector<Airport> Search::findBestFlight(const std::string& source, const std::string& destination) {
     // Resolve source and destination to actual airports
     std::vector<Airport> sourceAirports = resolveInput(source);
@@ -32,6 +42,13 @@ std::vector<Airport> Search::findBestFlight(const std::string& source, const std
     return shortestPath;
 }
 
+/**
+ * @brief Performs a BFS to find the shortest path (least stops) between two airports.
+ * @param src Source airport.
+ * @param dest Destination airport.
+ * @return A vector of Airports representing the path from src to dest. Empty if no path is found.
+ * @note Time complexity: O(E) where E is the number of edges in the graph.
+ */
 std::vector<Airport> Search::bfsFindPath(const Airport& src, const Airport& dest) {
     std::queue<Airport> queue;
     std::unordered_map<Airport, Airport, AirportHash, AirportEqual> predecessors;
@@ -61,6 +78,13 @@ std::vector<Airport> Search::bfsFindPath(const Airport& src, const Airport& dest
     return std::vector<Airport>(); // Return empty vector if no path is found
 }
 
+/**
+ * @brief Reconstructs the flight path from source to destination using the predecessors map.
+ * @param predecessors A map of Airport to its predecessor Airport on the path.
+ * @param src Source airport.
+ * @param dest Destination airport.
+ * @return A vector of Airports representing the path from src to dest.
+ */
 std::vector<Airport> Search::reconstructPath(const std::unordered_map<Airport, Airport, AirportHash, AirportEqual>& predecessors,
                                              const Airport& src, const Airport& dest) {
     std::vector<Airport> path;
@@ -72,6 +96,12 @@ std::vector<Airport> Search::reconstructPath(const std::unordered_map<Airport, A
     return path;
 }
 
+/**
+ * @brief Resolves the user input to a list of corresponding airports.
+ * @param input User input which can be an airport code, a city name, or geographical coordinates.
+ * @return A vector of Airports corresponding to the input.
+ * @note Time complexity: O(N) where N is the number of airports (for city names or coordinates).
+ */
 std::vector<Airport> Search::resolveInput(const std::string& input) {
     std::vector<Airport> airports;
 
@@ -97,6 +127,13 @@ std::vector<Airport> Search::resolveInput(const std::string& input) {
     return airports;
 }
 
+/**
+ * @brief Finds the nearest airport to the given geographical coordinates.
+ * @param lat Latitude.
+ * @param lon Longitude.
+ * @return The nearest Airport object. Empty if none found.
+ * @note Time complexity: O(N) where N is the number of airports.
+ */
 Airport Search::findNearestAirport(double lat, double lon) {
     double minDistance = std::numeric_limits<double>::max();
     Airport nearestAirport;
@@ -114,7 +151,13 @@ Airport Search::findNearestAirport(double lat, double lon) {
     return nearestAirport;
 }
 
-
+/**
+ * @brief Parses a string input into geographical coordinates.
+ * @param input The string containing coordinates.
+ * @param lat Reference to store latitude.
+ * @param lon Reference to store longitude.
+ * @return True if parsing is successful, false otherwise.
+ */
 bool Search::parseCoordinates(const std::string& input, double& lat, double& lon) {
     std::istringstream iss(input);
     char delimiter;

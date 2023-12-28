@@ -1,25 +1,35 @@
 #include "Statistics.h"
-#include <iostream>
 
+/**
+ * @brief Constructs a Statistics object.
+ * @param airportGraph Reference to the graph of airports.
+ * @param airlines Set of airlines.
+ */
 Statistics::Statistics(Graph<Airport>& airportGraph, std::unordered_set<Airline>& airlines )
         : airportGraph(airportGraph), airlines(airlines) {}
 
 
 
 
-
+/**
+ * @brief Gets the total number of airports in the graph.
+ * @return Total number of airports.
+ * @note Time complexity: O(1)
+ */
 int Statistics::getTotalNumberOfAirports() const {
     return airportGraph.getNumVertex();
 }
 
+/**
+ * @brief Calculates the total number of flights across all airports.
+ * @return Total number of flights.
+ * @note Time complexity: O(V + E) where V is the number of vertices (airports) and E is the number of edges (flights).
+ */
 int Statistics::getTotalNumberOfFlights() const {
     int totalFlights = 0;
 
-    // Iterate through all vertices in the graph
     for (const auto* vertex : airportGraph.getVertexSet()) {
-        // Iterate through all edges (adjacent vertices) of each vertex
         for (const auto& edge : vertex->getAdj()) {
-            // Add the number of flights in the edge's flight set to the total
             totalFlights += edge.getFlights().size();
         }
     }
@@ -30,7 +40,12 @@ int Statistics::getTotalNumberOfFlights() const {
 
 
 
-
+/**
+ * @brief Gets the number of unique airlines operating from a given airport.
+ * @param airportCode The airport code.
+ * @return The number of unique airlines.
+ * @note Time complexity: O(E) where E is the number of edges (flights) from the given airport.
+ */
 long Statistics::getNumberOfUniqueAirlinesFromAirport(const std::string &airportCode) const {
     const auto *airportVertex = airportGraph.findVertex(Airport(airportCode));
     if (!airportVertex) return -1;
@@ -44,6 +59,12 @@ long Statistics::getNumberOfUniqueAirlinesFromAirport(const std::string &airport
     return uniqueAirlines.size();
 }
 
+/**
+ * @brief Gets the number of flights departing from a given airport.
+ * @param airportCode The airport code.
+ * @return The number of flights from the airport.
+ * @note Time complexity: O(E) where E is the number of edges (flights) from the given airport.
+ */
 long Statistics::getNumberOfFlightsFromAirport(const std::string &airportCode) const {
     const auto *airportVertex = airportGraph.findVertex(Airport(airportCode));
     if (!airportVertex) return -1;
@@ -59,7 +80,11 @@ long Statistics::getNumberOfFlightsFromAirport(const std::string &airportCode) c
 
 
 
-
+/**
+ * @brief Gets the number of flights per city and per airline.
+ * @return A map where the key is a pair of city and airline, and the value is the number of flights.
+ * @note Time complexity: O(V * E) where V is the number of vertices (airports) and E is the number of edges (flights).
+ */
 std::map<std::pair<std::string, std::string>, long> Statistics::getNumberOfFlightsPerCityAirline() const {
     std::map<std::pair<std::string, std::string>, long> cityAirlineFlights;
 
@@ -77,6 +102,11 @@ std::map<std::pair<std::string, std::string>, long> Statistics::getNumberOfFligh
     return cityAirlineFlights;
 }
 
+/**
+ * @brief Gets the number of flights per city.
+ * @return A map where the key is the city name and the value is the number of flights.
+ * @note Time complexity: O(V * E) where V is the number of vertices (airports) and E is the number of edges (flights).
+ */
 std::map<std::string, long> Statistics::getNumberOfFlightsPerCity() const {
     std::map<std::string, long> cityFlights;
 
@@ -91,6 +121,7 @@ std::map<std::string, long> Statistics::getNumberOfFlightsPerCity() const {
 
     return cityFlights;
 }
+
 
 std::map<std::string, long> Statistics::getNumberOfFlightsPerAirline() const {
     std::map<std::string, long> airlineFlights;
@@ -109,7 +140,12 @@ std::map<std::string, long> Statistics::getNumberOfFlightsPerAirline() const {
 
 
 
-
+/**
+ * @brief Gets the number of different countries reachable from a given airport.
+ * @param airportCode The airport code.
+ * @return The number of different countries.
+ * @note Time complexity: O(E) where E is the number of edges (flights) from the given airport.
+ */
 long Statistics::getNumberOfDiffCountriesByAirport(const std::string& airportCode) const{
 
     const auto* airportVertex = airportGraph.findVertex(Airport(airportCode));
@@ -124,6 +160,12 @@ long Statistics::getNumberOfDiffCountriesByAirport(const std::string& airportCod
     return uniqueCountries.size();
 }
 
+/**
+ * @brief Gets the number of different countries reachable from a given city.
+ * @param city The name of the city.
+ * @return The number of different countries.
+ * @note Time complexity: O(E) where E is the number of edges (flights) from the given city.
+ */
 long Statistics::getNumberOfDiffCountriesByCity(const std::string& city) const{
     std::unordered_set<std::string> uniqueCountries;
     for(const auto* airportVertex : airportGraph.getVertexSet()){
@@ -141,7 +183,13 @@ long Statistics::getNumberOfDiffCountriesByCity(const std::string& city) const{
 
 
 
-
+/**
+ * @brief Finds all reachable airports from a given airport within a maximum number of stops.
+ * @param airportCode The airport code.
+ * @param maxStops The maximum number of layovers/stops.
+ * @return A set of airport codes that are reachable.
+ * @note Time complexity: O(V + E) where V is the number of vertices (airports) and E is the number of edges (flights).
+ */
 std::unordered_set<std::string> Statistics::getReachableAirports(const std::string& airportCode, int maxStops) const {
     std::unordered_set<std::string> reachableAirports;
     std::queue<std::pair<Vertex<Airport>*, int>> q;
@@ -238,7 +286,16 @@ std::unordered_set<std::string> Statistics::getReachableCountries(const std::str
 
 
 
-
+/**
+ * @brief Performs a depth-first search to identify the longest path in the graph.
+ * @param vertex The current vertex being explored in the DFS.
+ * @param visited A set to track visited airports during the DFS.
+ * @param path The current path being explored.
+ * @param longestPaths A reference to store all the longest paths found.
+ * @param maxLength The length of the longest path found so far.
+ * @note This is a helper function for findLongestPath().
+ *       Time complexity: O(V*(V+E)) where V is the number of vertices and E is the number of edges.
+ */
 void Statistics::dfs(Vertex<Airport>* vertex, std::unordered_set<std::string>& visited, std::vector<Airport>& path, std::vector<std::vector<Airport>>& longestPaths, int& maxLength) {
     vertex->setProcessing(true);
     path.push_back(vertex->getInfo());
@@ -266,6 +323,11 @@ void Statistics::dfs(Vertex<Airport>* vertex, std::unordered_set<std::string>& v
     vertex->setProcessing(false);
 }
 
+/**
+ * @brief Resets the visited status of all vertices in a graph.
+ * @param graph The graph whose vertices will have their visited status reset.
+ * @note Time complexity: O(V) where V is the number of vertices.
+ */
 void Statistics::resetVisited(Graph<Airport>& graph) {
     for (auto* vertex : graph.getVertexSet()) {
         vertex->setVisited(false);
@@ -273,7 +335,11 @@ void Statistics::resetVisited(Graph<Airport>& graph) {
     }
 }
 
-
+/**
+ * @brief Finds the longest path in the graph representing the maximum number of stops in a flight trip.
+ * @return A vector of vectors, each representing a path with the maximum length.
+ * @note Time complexity: O(V*(V+E)) where V is the number of vertices and E is the number of edges.
+ */
 std::vector<std::vector<Airport>> Statistics::findLongestPath() {
     std::vector<std::vector<Airport>> longestPaths;
     int maxLength = 0;
@@ -290,7 +356,12 @@ std::vector<std::vector<Airport>> Statistics::findLongestPath() {
 
 
 
-
+/**
+ * @brief Finds the top-k airports based on the number of flights.
+ * @param k The number of top airports to identify.
+ * @return A vector of pairs (Airport, int), where each pair contains an airport and its flight count.
+ * @note Time complexity: O(V log V + E) where V is the number of vertices (airports) and E is the number of edges (flights).
+ */
 std::vector<std::pair<Airport, int>> Statistics::getTopKAirportsByFlights(int k) {
     std::vector<std::pair<Airport, int>> airportFlightCounts;
 
@@ -312,7 +383,17 @@ std::vector<std::pair<Airport, int>> Statistics::getTopKAirportsByFlights(int k)
 }
 
 
-
+/**
+ * @brief Finds articulation points (essential airports) in the airport graph.
+ * @param v The current vertex being explored.
+ * @param time The discovery time counter used in the DFS.
+ * @param disc Discovery times of vertices.
+ * @param low Earliest visited vertex (lowest discovery time) that can be reached from the subtree rooted at the current vertex.
+ * @param parent Parent vertices in the DFS tree.
+ * @param articulationPoints Set to store the articulation points found.
+ * @note This is a helper function for findEssentialAirports().
+ *       Time complexity: O(V + E) where V is the number of vertices and E is the number of edges.
+ */
 void Statistics::findArticulationPoints(Vertex<Airport>* v, int& time,
                                         std::unordered_map<Airport, int, AirportHash, AirportEqual>& disc,
                                         std::unordered_map<Airport, int, AirportHash, AirportEqual>& low,
@@ -344,6 +425,11 @@ void Statistics::findArticulationPoints(Vertex<Airport>* v, int& time,
     }
 }
 
+/**
+ * @brief Identifies articulation points (essential airports) in the graph.
+ * @return A set of essential airports.
+ * @note Time complexity: O(V + E) where V is the number of vertices and E is the number of edges.
+ */
 std::unordered_set<Airport, AirportHash, AirportEqual> Statistics::findEssentialAirports() {
     Graph<Airport> undirectedGraph = createUndirectedCopy(airportGraph);
     std::unordered_set<Airport, AirportHash, AirportEqual> articulationPoints;
@@ -369,6 +455,12 @@ std::unordered_set<Airport, AirportHash, AirportEqual> Statistics::findEssential
     return articulationPoints;
 }
 
+/**
+ * @brief Creates an undirected copy of a directed graph.
+ * @param directedGraph The directed graph to copy.
+ * @return An undirected copy of the input graph.
+ * @note Time complexity: O(V + E) where V is the number of vertices and E is the number of edges.
+ */
 Graph<Airport> Statistics::createUndirectedCopy(const Graph<Airport>& directedGraph) {
     Graph<Airport> undirectedGraph;
 

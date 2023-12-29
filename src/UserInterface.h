@@ -24,7 +24,7 @@ private:
     std::unordered_set<Airline> airlines;
 
     //HANDLE FUNCTIONS
-
+    void clear();
     void handleStatistics();
     //DISPLAY FUNCTIONS
     void displayMainMenu();

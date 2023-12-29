@@ -33,6 +33,10 @@ void UserInterface::Title() {
     std::cout << "===== Airport Management System =====" << std::endl;
 }
 
+void UserInterface::clear() {
+        std::cout << std::endl << std::endl << std::endl;
+}
+
 
 
 
@@ -43,6 +47,7 @@ void UserInterface::handleMainMenu(bool& running) {
     int choice;
 
     while (true) {
+        clear();
         displayMainMenu();
         std::cout << "Enter your choice: ";
         if (std::cin >> choice) {
@@ -68,9 +73,11 @@ void UserInterface::handleMainMenu(bool& running) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
         }
     }
+
 }
 
 void UserInterface::handleFlightSearch() {
+    clear();
     // Get source and destination from the user
     std::string source = getUserInput("Enter source (airport code, city name, or coordinates('latitude,longitude')): ");
     std::string destination = getUserInput("Enter destination (airport code, city name, or coordinates('latitude,longitude')): ");
@@ -90,17 +97,20 @@ void UserInterface::handleFlightSearch() {
         std::cout << airport.getName() << " (" << airport.getCode() << ") -> ";
     }
     std::cout << "End" << std::endl;
+
 }
 
 
 
 void UserInterface::handleStatistics() {
+
     int choice;
     bool done = false;
     std::string input;
     int maxStops, k;
     Statistics statistics(airportGraph, airlines);
     while (!done) {
+        clear();
         displayStatisticsOptions();
         std::cout << "Enter your choice: ";
         if (!(std::cin >> choice)) {

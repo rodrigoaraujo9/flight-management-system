@@ -15,10 +15,13 @@ add_executable(Project_2_AED
         src/Read.h
         src/Read.cpp
         src/Graph.h
-        src/Main.cpp
         src/Statistics.h
         src/Statistics.cpp
         src/Search.h
         src/Search.cpp
         src/Haversine.h
-        src/Haversine.cpp)
+        src/Haversine.cpp
+        src/UserInterface.h
+        src/UserInterface.cpp
+        src/Main.cpp
+)

@@ -95,7 +95,129 @@ void UserInterface::handleFlightSearch() {
 
 
 void UserInterface::handleStatistics() {
-    // Implementation for handling statistics display
+    int choice;
+    bool done = false;
+    std::string input;
+    int maxStops, k;
+    Statistics statistics(airportGraph, airlines);
+    while (!done) {
+        displayStatisticsOptions();
+        std::cout << "Enter your choice: ";
+        if (!(std::cin >> choice)) {
+            std::cout << "Invalid input. Please enter a number.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the newline character
+
+        switch (choice) {
+            case 1:
+                std::cout << "Total number of airports: " << statistics.getTotalNumberOfAirports() << std::endl;
+                break;
+            case 2:
+                std::cout << "Total number of flights: " << statistics.getTotalNumberOfFlights() << std::endl;
+                break;
+            case 3:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Number of flights from " << input << ": " << statistics.getNumberOfFlightsFromAirport(input) << std::endl;
+                break;
+            case 4:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Number of unique airlines from " << input << ": " << statistics.getNumberOfUniqueAirlinesFromAirport(input) << std::endl;
+                break;
+            case 5:
+                // Assuming this function returns a map and you want to display the contents
+                for (const auto& pair : statistics.getNumberOfFlightsPerCityAirline()) {
+                    std::cout << "City: " << pair.first.first << ", Airline: " << pair.first.second << ", Flights: " << pair.second << std::endl;
+                }
+            case 6:
+                std::cout << "Number of flights per city:" << std::endl;
+                for (const auto& pair : statistics.getNumberOfFlightsPerCity()) {
+                    std::cout << "City: " << pair.first << ", Flights: " << pair.second << std::endl;
+                }
+                break;
+            case 7:
+                std::cout << "Number of flights per airline:" << std::endl;
+                for (const auto& pair : statistics.getNumberOfFlightsPerAirline()) {
+                    std::cout << "Airline: " << pair.first << ", Flights: " << pair.second << std::endl;
+                }
+                break;
+            case 8:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Number of different countries reachable from " << input << ": " << statistics.getNumberOfDiffCountriesByAirport(input) << std::endl;
+                break;
+            case 9:
+                std::cout << "Enter city name: ";
+                getline(std::cin, input);
+                std::cout << "Number of different countries reachable from " << input << ": " << statistics.getNumberOfDiffCountriesByCity(input) << std::endl;
+                break;
+            case 10:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Enter maximum number of stops: ";
+                std::cin >> maxStops;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                // Assuming getReachableAirports returns a set of strings
+                for (const auto& airport : statistics.getReachableAirports(input, maxStops)) {
+                    std::cout << airport << std::endl;
+                }
+                break;
+            case 11:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Enter maximum number of stops: ";
+                std::cin >> maxStops;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                for (const auto& city : statistics.getReachableCities(input, maxStops)) {
+                    std::cout << city << std::endl;
+                }
+                break;
+            case 12:
+                std::cout << "Enter airport code: ";
+                getline(std::cin, input);
+                std::cout << "Enter maximum number of stops: ";
+                std::cin >> maxStops;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                for (const auto& country : statistics.getReachableCountries(input, maxStops)) {
+                    std::cout << country << std::endl;
+                }
+                break;
+            case 13:
+                for (const auto& path : statistics.findLongestPath()) {
+                    for (const auto& airport : path) {
+                        std::cout << airport.getCode() << " -> ";
+                    }
+                    std::cout << std::endl;
+                }
+                break;
+            case 14:
+                std::cout << "Enter the number K: ";
+                std::cin >> k;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                for (const auto& pair : statistics.getTopKAirportsByFlights(k)) {
+                    std::cout << "Airport: " << pair.first.getCode() << ", Flights: " << pair.second << std::endl;
+                }
+                break;
+            case 15:
+                for (const auto& airport : statistics.findEssentialAirports()) {
+                    std::cout << airport.getCode() << std::endl;
+                }
+                break;
+            case 16:
+                done = true;
+                break;
+            case 17:
+                exit(0);
+                break;
+            default:
+                std::cout << "Invalid option. Please try again.\n";
+        }
+    }
 }
 
 

@@ -75,7 +75,7 @@ std::vector<Airport> Search::bfsFindPath(const Airport& src, const Airport& dest
         }
     }
 
-    return std::vector<Airport>(); // Return empty vector if no path is found
+    return std::vector<Airport>();
 }
 
 /**
@@ -105,15 +105,15 @@ std::vector<Airport> Search::reconstructPath(const std::unordered_map<Airport, A
 std::vector<Airport> Search::resolveInput(const std::string& input) {
     std::vector<Airport> airports;
 
-    // Check if input is an airport code
+    // CHECK IF INPUT IS AIRPORTCODE
     if (airportsByCode.find(input) != airportsByCode.end()) {
         airports.push_back(airportsByCode[input]);
     }
-        // Check if input is a city name
+        // CHECK IF INPUT IS CITY NAME
     else if (airportsByCity.find(input) != airportsByCity.end()) {
         airports.insert(airports.end(), airportsByCity[input].begin(), airportsByCity[input].end());
     }
-        // Handle coordinates input
+        // HANDLE COORDINATES INPUT
     else {
         double inputLat, inputLon;
         if (parseCoordinates(input, inputLat, inputLon)) {
@@ -165,6 +165,5 @@ bool Search::parseCoordinates(const std::string& input, double& lat, double& lon
     if (iss >> lat >> delimiter && delimiter == ',' && iss >> lon) {
         return true;
     }
-
     return false;
 }

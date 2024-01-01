@@ -23,5 +23,6 @@ add_executable(Project_2_AED
         src/Haversine.cpp
         src/UserInterface.h
         src/UserInterface.cpp
-        src/Main.cpp
+        src/FilteredSearch.cpp
+        src/MainTest.cpp
 )

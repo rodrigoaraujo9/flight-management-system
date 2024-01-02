@@ -7,4 +7,3 @@ public:
 };
 
 #endif // HAVERSINE_H
-

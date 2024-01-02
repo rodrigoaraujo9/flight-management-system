@@ -5,6 +5,13 @@
 #include <fstream>
 #include <sstream>
 
+
+/**
+ * @brief Reads airline data from a file and stores it in an unordered set.
+ * @param airlines Reference to the unordered set where airlines will be stored.
+ * @param filename The name of the file containing airline data.
+ * @note Time complexity: O(N) where N is the number of lines in the file.
+ */
 void Read::readAirlines(std::unordered_set<Airline>& airlines, const std::string& filename) {
     std::ifstream file(filename);
     std::string line;
@@ -23,7 +30,12 @@ void Read::readAirlines(std::unordered_set<Airline>& airlines, const std::string
     }
 }
 
-
+/**
+ * @brief Reads airport data from a file and adds it to a graph.
+ * @param airportGraph Reference to the graph where airports will be added.
+ * @param filename The name of the file containing airport data.
+ * @note Time complexity: O(N) where N is the number of lines in the file.
+ */
 void Read::readAirports(Graph<Airport>& airportGraph, const std::string& filename) {
     std::ifstream file(filename);
     std::string line;
@@ -43,6 +55,14 @@ void Read::readAirports(Graph<Airport>& airportGraph, const std::string& filenam
         airportGraph.addVertex(airport);
     }
 }
+
+/**
+ * @brief Reads flight data from a file and adds it to the edges of a graph.
+ * @param airportGraph Reference to the graph where flights will be added.
+ * @param filename The name of the file containing flight data.
+ * @note Time complexity: O(N) where N is the number of lines in the file.
+ *       Additional complexity depends on the implementation of graph operations.
+ */
 
 void Read::readFlights(Graph<Airport>& airportGraph, const std::string& filename) {
     std::ifstream file(filename);

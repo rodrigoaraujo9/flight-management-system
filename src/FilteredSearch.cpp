@@ -1,5 +1,21 @@
 #include "Search.h"
-
+/**
+ * @brief Finds the best flight path from the source to the destination.
+ *
+ * This function searches for the best flight path from the source location
+ * to the destination location, considering optional filters such as preferred
+ * airlines and minimizing airline changes.
+ *
+ * @param source The source location, which can be an airport code, city name, or coordinates.
+ * @param destination The destination location, similar to source.
+ * @param preferredAirlines A set of preferred airline codes. Flights operated by these airlines are favored.
+ * @param minimizeAirlineChanges If true, the algorithm attempts to minimize airline changes in the path.
+ * @return A vector of pairs, where each pair consists of an Airport and a corresponding airline code,
+ *         representing the best flight path. The path starts with the source location and ends at the destination.
+ *         Returns an empty vector if no path is found.
+ *
+ * @note Time complexity: O(V + E), where V is the number of vertices (airports) and E is the number of edges (flights) in the graph.
+ */
 std::vector<std::pair<Airport, std::string>> Search::findBestFlight(
         const std::string& source,
         const std::string& destination,
@@ -27,7 +43,22 @@ std::vector<std::pair<Airport, std::string>> Search::findBestFlight(
     return bestPath;
 }
 
-
+/**
+ * @brief Breadth-First Search (BFS) to find a flight path with optional filters.
+ *
+ * This function performs a BFS to find a flight path from the source airport to the destination airport,
+ * considering optional filters such as preferred airlines and minimizing airline changes.
+ *
+ * @param src The source airport.
+ * @param dest The destination airport.
+ * @param preferredAirlines A set of preferred airline codes. Flights operated by these airlines are favored.
+ * @param minimizeAirlineChanges If true, the algorithm attempts to minimize airline changes in the path.
+ * @return A vector of pairs, where each pair consists of an Airport and a corresponding airline code,
+ *         representing the flight path from the source to the destination. The path includes both airports and airlines.
+ *         Returns an empty vector if no path is found.
+ *
+ * @note Time complexity: O(V + E), where V is the number of vertices (airports) and E is the number of edges (flights) in the graph.
+ */
 std::vector<std::pair<Airport, std::string>> Search::bfsFindPathWithFilters(
         const Airport& src,
         const Airport& dest,

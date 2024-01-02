@@ -221,10 +221,10 @@ void UserInterface::handleStatistics() {
                 std::cout << "Enter maximum number of stops: ";
                 std::cin >> maxStops;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                // Assuming getReachableAirports returns a set of strings
                 for (const auto& airport : statistics.getReachableAirports(input, maxStops)) {
                     std::cout << airport << std::endl;
                 }
+                std::cout << "Number of reachable airports: " << statistics.getReachableAirports(input, maxStops).size() << std::endl;
                 break;
             case 11:
                 std::cout << "Enter airport code: ";
@@ -235,6 +235,7 @@ void UserInterface::handleStatistics() {
                 for (const auto& city : statistics.getReachableCities(input, maxStops)) {
                     std::cout << city << std::endl;
                 }
+                std::cout << "Number of reachable cities: " << statistics.getReachableCities(input, maxStops).size() << std::endl;
                 break;
             case 12:
                 std::cout << "Enter airport code: ";
@@ -245,14 +246,17 @@ void UserInterface::handleStatistics() {
                 for (const auto& country : statistics.getReachableCountries(input, maxStops)) {
                     std::cout << country << std::endl;
                 }
+                std::cout << "Number of reachable countries: " << statistics.getReachableCountries(input, maxStops).size() << std::endl;
                 break;
             case 13:
+
                 for (const auto& path : statistics.findLongestPath()) {
                     for (const auto& airport : path) {
                         std::cout << airport.getCode() << " -> ";
                     }
                     std::cout << std::endl;
                 }
+                std::cout << "Path length: " << statistics.findLongestPath().size() << std::endl;
                 break;
             case 14:
                 std::cout << "Enter the number K: ";
@@ -266,6 +270,7 @@ void UserInterface::handleStatistics() {
                 for (const auto& airport : statistics.findEssentialAirports()) {
                     std::cout << airport.getCode() << std::endl;
                 }
+                std::cout << "Number of essential airports: " << statistics.findEssentialAirports().size() << std::endl;
                 break;
             case 16:
                 done = true;

@@ -158,6 +158,7 @@ void UserInterface::handleStatistics() {
     std::string input;
     int maxStops, k;
     Statistics statistics(airportGraph, airlines);
+    auto longestPath = statistics.findLongestPath();
     while (!done) {
         clear();
         displayStatisticsOptions();
@@ -255,14 +256,14 @@ void UserInterface::handleStatistics() {
                 break;
             }
             case 13: {
-                auto longestPath = statistics.findLongestPath(); // Store result in a variable
                 for (const auto& path : longestPath) {
                     for (const auto& airport : path) {
                         std::cout << airport.getCode() << " -> ";
                     }
                     std::cout << std::endl;
+                    std::cout << "Path length: " << path.size() << std::endl;
                 }
-                std::cout << "Path length: " << longestPath.size() << std::endl;
+
                 break;
             }
             case 14:
@@ -276,7 +277,7 @@ void UserInterface::handleStatistics() {
             case 15: {
                 auto essentialAirports = statistics.findEssentialAirports(); // Store result in a variable
                 for (const auto& airport : essentialAirports) {
-                    std::cout << airport.getCode() << std::endl;
+                    std::cout << airport.getName() << " (" << airport.getCode() << ")" << std::endl;
                 }
                 std::cout << "Number of essential airports: " << essentialAirports.size() << std::endl;
                 break;

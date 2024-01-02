@@ -58,9 +58,12 @@ void UserInterface::handleMainMenu(bool& running) {
                     handleFlightSearch();
                     break;
                 case 2:
-                    handleStatistics();
+                    handleFilteredFlightSearch();
                     break;
                 case 3:
+                    handleStatistics();
+                    break;
+                case 4:
                     std::cout << "Exiting...\n";
                     running = false;
                     return;
@@ -75,6 +78,52 @@ void UserInterface::handleMainMenu(bool& running) {
     }
 
 }
+
+void UserInterface::handleFilteredFlightSearch() {
+    clear();
+
+    // Get source and destination from the user
+    std::string source = getUserInput("Enter source (airport code, city name, or coordinates('latitude,longitude')): ");
+    std::string destination = getUserInput("Enter destination (airport code, city name, or coordinates('latitude,longitude')): ");
+
+    // Get preferred airlines from the user
+    std::unordered_set<std::string> preferredAirlines;
+    std::string airlineInput = getUserInput("Enter preferred airlines (comma-separated, leave empty for no preference): ");
+    if (!airlineInput.empty()) {
+        // Split the comma-separated input into individual airline codes
+        std::istringstream ss(airlineInput);
+        std::string airlineCode;
+        while (std::getline(ss, airlineCode, ',')) {
+            preferredAirlines.insert(airlineCode);
+        }
+    }
+
+    // Get user preference for minimizing airline changes
+    bool minimizeAirlineChanges;
+    std::string minimizeInput = getUserInput("Minimize airline changes? (y/n): ");
+    minimizeAirlineChanges = (minimizeInput == "y" || minimizeInput == "Y");
+
+    // Create a Search object
+    Search search(airportGraph); // Assuming airportGraph is accessible in UserInterface
+
+    // Find the best flight with filters
+    auto bestFlights = search.findBestFlight(source, destination, preferredAirlines, minimizeAirlineChanges);
+
+    if (bestFlights.empty()) {
+        std::cout << "No flights found from " << source << " to " << destination << " with the specified filters." << std::endl;
+        return;
+    }
+
+    // Display the best flight path
+    std::cout << "Best flight path from " << source << " to " << destination << " with filters:" << std::endl;
+    std::cout << bestFlights[0].first.getName()<< " (" << bestFlights[0].first.getCode() << ") -> ";
+    for (size_t i = 1; i < bestFlights.size(); ++i) {
+        const auto& airport = bestFlights[i];
+        std::cout << airport.second << " -> " << airport.first.getName() << " (" << airport.first.getCode() << ") -> ";
+    }
+    std::cout << "End" << std::endl;
+}
+
 
 void UserInterface::handleFlightSearch() {
     clear();
@@ -238,8 +287,9 @@ void UserInterface::handleStatistics() {
 void UserInterface::displayMainMenu() {
     Title();
     std::cout << "1. Search for Flights" << std::endl;
-    std::cout << "2. View Statistics" << std::endl;
-    std::cout << "3. Quit" << std::endl;
+    std::cout << "2. Search For Flights with Filters" << std::endl;
+    std::cout << "3. View Statistics" << std::endl;
+    std::cout << "4. Quit" << std::endl;
 }
 
 void UserInterface::displayFlightOptions(const std::vector<Airport>& path) {

@@ -112,8 +112,8 @@ build CMakeFiles/Project_2_AED.dir/src/FilteredSearch.cpp.o: CXX_COMPILER__Proje
   OBJECT_DIR = CMakeFiles/Project_2_AED.dir
   OBJECT_FILE_DIR = CMakeFiles/Project_2_AED.dir/src
 
-build CMakeFiles/Project_2_AED.dir/src/MainTest.cpp.o: CXX_COMPILER__Project_2_AED_unscanned_Debug /Users/rodrigoaraujo/Documents/GitHub/Project-2-AED/src/MainTest.cpp || cmake_object_order_depends_target_Project_2_AED
-  DEP_FILE = CMakeFiles/Project_2_AED.dir/src/MainTest.cpp.o.d
+build CMakeFiles/Project_2_AED.dir/src/Main.cpp.o: CXX_COMPILER__Project_2_AED_unscanned_Debug /Users/rodrigoaraujo/Documents/GitHub/Project-2-AED/src/Main.cpp || cmake_object_order_depends_target_Project_2_AED
+  DEP_FILE = CMakeFiles/Project_2_AED.dir/src/Main.cpp.o.d
   FLAGS = -g -std=gnu++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
   INCLUDES = -I/Users/rodrigoaraujo/Documents/GitHub/Project-2-AED/src
   OBJECT_DIR = CMakeFiles/Project_2_AED.dir
@@ -127,7 +127,7 @@ build CMakeFiles/Project_2_AED.dir/src/MainTest.cpp.o: CXX_COMPILER__Project_2_A
 #############################################
 # Link the executable Project_2_AED
 
-build Project_2_AED: CXX_EXECUTABLE_LINKER__Project_2_AED_Debug CMakeFiles/Project_2_AED.dir/src/Airline.cpp.o CMakeFiles/Project_2_AED.dir/src/Airport.cpp.o CMakeFiles/Project_2_AED.dir/src/Flight.cpp.o CMakeFiles/Project_2_AED.dir/src/Read.cpp.o CMakeFiles/Project_2_AED.dir/src/Statistics.cpp.o CMakeFiles/Project_2_AED.dir/src/Search.cpp.o CMakeFiles/Project_2_AED.dir/src/Haversine.cpp.o CMakeFiles/Project_2_AED.dir/src/UserInterface.cpp.o CMakeFiles/Project_2_AED.dir/src/FilteredSearch.cpp.o CMakeFiles/Project_2_AED.dir/src/MainTest.cpp.o
+build Project_2_AED: CXX_EXECUTABLE_LINKER__Project_2_AED_Debug CMakeFiles/Project_2_AED.dir/src/Airline.cpp.o CMakeFiles/Project_2_AED.dir/src/Airport.cpp.o CMakeFiles/Project_2_AED.dir/src/Flight.cpp.o CMakeFiles/Project_2_AED.dir/src/Read.cpp.o CMakeFiles/Project_2_AED.dir/src/Statistics.cpp.o CMakeFiles/Project_2_AED.dir/src/Search.cpp.o CMakeFiles/Project_2_AED.dir/src/Haversine.cpp.o CMakeFiles/Project_2_AED.dir/src/UserInterface.cpp.o CMakeFiles/Project_2_AED.dir/src/FilteredSearch.cpp.o CMakeFiles/Project_2_AED.dir/src/Main.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   OBJECT_DIR = CMakeFiles/Project_2_AED.dir
   POST_BUILD = :

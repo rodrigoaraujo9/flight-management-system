@@ -18,10 +18,11 @@ public:
 
     std::vector<Airport> findBestFlight(const std::string& source, const std::string& destination);
 
-    std::vector<Airport> findBestFlight(const std::string& source,
-                                                                        const std::string& destination,
-                                                                        const std::unordered_set<std::string>& preferredAirlines,
-                                                                        bool minimizeAirlineChanges);
+    std::vector<std::pair<Airport, std::string>> findBestFlight(
+            const std::string& source,
+            const std::string& destination,
+            const std::unordered_set<std::string>& preferredAirlines,
+            bool minimizeAirlineChanges);
 
 
 private:
@@ -36,10 +37,11 @@ private:
     std::vector<Airport> resolveInput(const std::string& input);
     Airport findNearestAirport(double lat, double lon);
     bool parseCoordinates(const std::string& input, double& lat, double& lon);
-    std::vector<Airport> bfsFindPathWithFilters(const Airport& src,
-                                                const Airport& dest,
-                                                const std::unordered_set<std::string>& preferredAirlines,
-                                                bool minimizeAirlineChanges);
+    std::vector<std::pair<Airport, std::string>> bfsFindPathWithFilters(
+            const Airport& src,
+            const Airport& dest,
+            const std::unordered_set<std::string>& preferredAirlines,
+            bool minimizeAirlineChanges);
 
 };
 

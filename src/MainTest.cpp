@@ -3,39 +3,51 @@
 #include "Read.h"
 #include <iostream>
 #include <unordered_set>
+#include "Airline.h"
 
 int main() {
+    // Initialize the graph and read data
     Graph<Airport> airportGraph;
+    std::unordered_set<Airline> airlines;
     Read reader;
+    std::string path = "../dataset/"; // Adjust the path according to your file structure
 
-    // Read data from the dataset
-    reader.readAirports(airportGraph, "../dataset/airports.csv");
-    reader.readFlights(airportGraph, "../dataset/flights.csv");
+    reader.readAirports(airportGraph, path + "airports.csv");
+    reader.readAirlines(airlines, path + "airlines.csv");
+    reader.readFlights(airportGraph, path + "flights.csv");
 
     // Create a Search object
     Search search(airportGraph);
 
-    // Define the test parameters
-    std::string source = "CDG"; // Paris Charles de Gaulle Airport
-    std::string destination = "LAX"; // Los Angeles International Airport
-    std::unordered_set<std::string> preferredAirlines = {"AFR", "DAL"}; // Air France and Delta Air Lines
-    bool minimizeAirlineChanges = true;
+    // Define test cases
+    std::string source = "LIS";
+    std::string destination = "JFK"; // Assuming JFK is a possible destination from LIS
 
-    // Find the best flight
-    auto bestFlights = search.findBestFlight(source, destination, preferredAirlines, minimizeAirlineChanges);
-
-    // Display the results
-    std::cout << "Best flight path from " << source << " to " << destination << " with preferred airlines and minimized airline changes:" << std::endl;
-    if (bestFlights.empty()) {
-        std::cout << "No suitable flights found." << std::endl;
-    } else {
-        for (const auto& airport : bestFlights) {
-            std::cout << airport.getName() << " (" << airport.getCode() << ") -> ";
-        }
-        std::cout << "End" << std::endl;
+    // Test 1: Preferred airlines
+    std::unordered_set<std::string> preferredAirlines = {"TAP", "AAL"}; // Assuming TAP and AAL operate flights from LIS
+    auto bestFlights = search.findBestFlight(source, destination, preferredAirlines, false);
+    std::cout << "Best flights from LIS to JFK with preferred airlines (TAP, AAL):\n";
+    for (const auto& [airport, airline] : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") via " << airline << " -> ";
     }
+    std::cout << "End\n\n";
+
+    // Test 2: Minimize airline changes
+    bestFlights = search.findBestFlight(source, destination, {}, true);
+    std::cout << "Best flights from LIS to JFK minimizing airline changes:\n";
+
+    for (const auto& [airport, airline] : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") via " << airline << " -> ";
+    }
+    std::cout << "End\n\n";
+
+    // Test 3: No preferences
+    bestFlights = search.findBestFlight(source, destination, {}, false);
+    std::cout << "Best flights from LIS to JFK with no preferences:\n";
+    for (const auto& [airport, airline] : bestFlights) {
+        std::cout << airport.getName() << " (" << airport.getCode() << ") via " << airline << " -> ";
+    }
+    std::cout << "End\n";
 
     return 0;
 }
-
-

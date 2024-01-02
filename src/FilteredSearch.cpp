@@ -1,85 +1,91 @@
 #include "Search.h"
 
-std::vector<Airport> Search::findBestFlight(const std::string& source,
-                                    const std::string& destination,
-                                    const std::unordered_set<std::string>& preferredAirlines,
-                                    bool minimizeAirlineChanges){
+std::vector<std::pair<Airport, std::string>> Search::findBestFlight(
+        const std::string& source,
+        const std::string& destination,
+        const std::unordered_set<std::string>& preferredAirlines,
+        bool minimizeAirlineChanges)
+{
     std::vector<Airport> sourceAirports = resolveInput(source);
     std::vector<Airport> destinationAirports = resolveInput(destination);
 
-    std::vector<Airport> shortestPath;
+    std::vector<std::pair<Airport, std::string>> bestPath;
     int minStops = std::numeric_limits<int>::max();
 
     for (const auto& srcAirport : sourceAirports) {
         for (const auto& destAirport : destinationAirports) {
-            auto path = bfsFindPathWithFilters(srcAirport, destAirport,preferredAirlines, minimizeAirlineChanges);
-            int stops = path.size() - 1; // Num of stops is one less than the num of airports in the path
+            auto pathWithAirlines = bfsFindPathWithFilters(srcAirport, destAirport, preferredAirlines, minimizeAirlineChanges);
+            int stops = pathWithAirlines.size() - 1; // Number of stops is one less than the number of airports in the path
 
             if (stops < minStops) {
-                shortestPath = path;
+                bestPath = std::move(pathWithAirlines);
                 minStops = stops;
             }
         }
     }
 
-    return shortestPath;
-
+    return bestPath;
 }
 
-//implement filters
-std::vector<Airport> Search::bfsFindPathWithFilters(const Airport& src,
-                                                    const Airport& dest,
-                                                    const std::unordered_set<std::string>& preferredAirlines,
-                                                    bool minimizeAirlineChanges) {
+
+std::vector<std::pair<Airport, std::string>> Search::bfsFindPathWithFilters(
+        const Airport& src,
+        const Airport& dest,
+        const std::unordered_set<std::string>& preferredAirlines,
+        bool minimizeAirlineChanges)
+{
     struct QueueNode {
         Airport airport;
+        std::vector<std::pair<Airport, std::string>> path;  // Path including airports and airlines
         std::string lastAirline;
         int airlineChanges;
     };
 
     std::queue<QueueNode> queue;
-    std::unordered_map<Airport, Airport, AirportHash, AirportEqual> predecessors;
-    std::unordered_map<Airport, std::string, AirportHash, AirportEqual> lastAirlines;
-    std::unordered_map<Airport, int, AirportHash, AirportEqual> airlineChangesMap;
     std::unordered_set<Airport, AirportHash, AirportEqual> visited;
 
-    queue.push({src, "", 0});
+    // Initialize the path with the source airport and an empty string
+    std::vector<std::pair<Airport, std::string>> initialPath = {{src, ""}};
+
+    queue.push({src, initialPath, "", 0});  // Push the source airport with the initial path
     visited.insert(src);
-    airlineChangesMap[src] = 0;
 
     while (!queue.empty()) {
         QueueNode currentNode = queue.front();
         queue.pop();
-        Airport current = currentNode.airport;
+        Airport currentAirport = currentNode.airport;
         std::string currentAirline = currentNode.lastAirline;
         int currentChanges = currentNode.airlineChanges;
 
-        if (current == dest) {
-            return reconstructPath(predecessors, src, dest);
+        if (currentAirport == dest) {
+            // No need to remove the initial dummy airline entry for the source airport
+            return currentNode.path;
         }
 
-        for (const auto& edge : graph.findVertex(current)->getAdj()) {
-            for (const auto& flight : edge.getFlights()) {  // Iterate over all flights on the edge
-                Airport neighbor = edge.getDest()->getInfo();
+        for (const auto& edge : graph.findVertex(currentAirport)->getAdj()) {
+            for (const auto& flight : edge.getFlights()) {
+                Airport nextAirport = edge.getDest()->getInfo();
                 std::string nextAirline = flight.getAirline();
-                int nextChanges = currentChanges + (currentAirline != nextAirline && !currentAirline.empty() ? 1 : 0);
 
-                bool shouldConsiderFlight = (preferredAirlines.empty() || preferredAirlines.count(nextAirline)) &&
-                                            (!visited.count(neighbor) ||
-                                             (minimizeAirlineChanges && nextChanges < airlineChangesMap[neighbor]));
+                if ((preferredAirlines.empty() || preferredAirlines.count(nextAirline)) &&
+                    !visited.count(nextAirport)) {
+                    int nextChanges = currentChanges + (currentAirline != nextAirline && !currentAirline.empty() ? 1 : 0);
 
-                if (shouldConsiderFlight) {
-                    visited.insert(neighbor);
-                    predecessors[neighbor] = current;
-                    lastAirlines[neighbor] = nextAirline;
-                    airlineChangesMap[neighbor] = nextChanges;
-                    queue.push({neighbor, nextAirline, nextChanges});
+                    if (!minimizeAirlineChanges || nextChanges <= currentChanges) {
+                        visited.insert(nextAirport);
+
+                        // Prepare a new path with the current flight
+                        auto newPath = currentNode.path;
+                        newPath.emplace_back(nextAirport, nextAirline); // Record the next airport with its corresponding airline
+
+                        // Push the new state to the queue
+                        queue.push({nextAirport, newPath, nextAirline, nextChanges});
+                    }
                 }
             }
         }
     }
 
-    return std::vector<Airport>();
+    return std::vector<std::pair<Airport, std::string>>();  // Return empty path if no path is found
 }
-
 

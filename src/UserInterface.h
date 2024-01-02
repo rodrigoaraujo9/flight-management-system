@@ -15,8 +15,6 @@
 class UserInterface {
 public:
     UserInterface( );
-    void handleFlightSearch();
-
     void run();
 
 private:
@@ -24,8 +22,10 @@ private:
     std::unordered_set<Airline> airlines;
 
     //HANDLE FUNCTIONS
-    void clear();
     void handleStatistics();
+    void handleMainMenu(bool& running);
+    void handleFilteredFlightSearch();
+    void handleFlightSearch();
     //DISPLAY FUNCTIONS
     void displayMainMenu();
     void displayFlightOptions(const std::vector<Airport>& path);
@@ -34,7 +34,7 @@ private:
     std::string getUserInput(const std::string& prompt);
     void pauseScreen();
     void Title();
-    void handleMainMenu(bool& running);
+    void clear();
 };
 
 #endif // USERINTERFACE_H

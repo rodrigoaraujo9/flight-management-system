@@ -12,7 +12,6 @@ UserInterface::UserInterface() {
 std::string UserInterface::getUserInput(const std::string& prompt) {
     std::cout << prompt;
 
-    // Clear any errors and ignore leftover characters only if necessary
     if (std::cin.fail()) {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -21,12 +20,6 @@ std::string UserInterface::getUserInput(const std::string& prompt) {
     std::string input;
     getline(std::cin, input);
     return input;
-}
-
-
-void UserInterface::pauseScreen() {
-    std::cout << "Press enter to continue...";
-    std::cin.get();
 }
 
 void UserInterface::Title() {
@@ -124,7 +117,6 @@ void UserInterface::handleFilteredFlightSearch() {
     std::cout << "End" << std::endl;
 }
 
-
 void UserInterface::handleFlightSearch() {
     clear();
     // Get source and destination from the user
@@ -148,8 +140,6 @@ void UserInterface::handleFlightSearch() {
     std::cout << "End" << std::endl;
 
 }
-
-
 
 void UserInterface::handleStatistics() {
 
@@ -305,22 +295,6 @@ void UserInterface::displayMainMenu() {
     std::cout << "2. Search For Flights with Filters" << std::endl;
     std::cout << "3. View Statistics" << std::endl;
     std::cout << "4. Quit" << std::endl;
-}
-
-void UserInterface::displayFlightOptions(const std::vector<Airport>& path) {
-    Title();
-    if (path.empty()) {
-        std::cout << "No flight path available." << std::endl;
-        return;
-    }
-    for (size_t i = 0; i < path.size(); ++i) {
-        const Airport& airport = path[i];
-        std::cout << airport.getName() << " (" << airport.getCode() << ")";
-        if (i < path.size() - 1) {
-            std::cout << " -> ";
-        }
-    }
-    std::cout << std::endl;
 }
 
 void UserInterface::displayStatisticsOptions() {

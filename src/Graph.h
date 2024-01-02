@@ -84,7 +84,6 @@ class Graph {
     list<list<T>> _list_sccs_;        // auxiliary field
 
     void dfsVisit(Vertex<T> *v,  vector<T> & res) const;
-    bool dfsIsDAG(Vertex<T> *v) const;
 public:
     Vertex<T> *findVertex(const T &in) const;
     int getNumVertex() const;
@@ -96,7 +95,6 @@ public:
     vector<T> dfs() const;
     vector<T> dfs(const T & source) const;
     vector<T> bfs(const T &source) const;
-    vector<T> topsort() const;
     Edge<T>* getEdge(const T &source, const T &dest);
 
 };
@@ -413,27 +411,6 @@ vector<T> Graph<T>::bfs(const T & source) const {
             }
         }
     }
-    return res;
-}
-
-
-
-/****************** toposort ********************/
-//=============================================================================
-// Exercise 1: Topological Sorting
-//=============================================================================
-// TODO
-/*
- * Performs a topological sorting of the vertices of a graph (this).
- * Returns a vector with the contents of the vertices by topological order.
- * If the graph has cycles, returns an empty vector.
- * Follows the algorithm described in theoretical classes.
- */
-
-template<class T>
-vector<T> Graph<T>::topsort() const {
-    vector<T> res;
-
     return res;
 }
 

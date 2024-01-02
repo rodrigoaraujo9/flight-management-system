@@ -28,11 +28,9 @@ private:
     void handleFlightSearch();
     //DISPLAY FUNCTIONS
     void displayMainMenu();
-    void displayFlightOptions(const std::vector<Airport>& path);
     void displayStatisticsOptions();
     //UTILITY
     std::string getUserInput(const std::string& prompt);
-    void pauseScreen();
     void Title();
     void clear();
 };

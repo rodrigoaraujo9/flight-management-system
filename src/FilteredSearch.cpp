@@ -67,7 +67,7 @@ std::vector<std::pair<Airport, std::string>> Search::bfsFindPathWithFilters(
 {
     struct QueueNode {
         Airport airport;
-        std::vector<std::pair<Airport, std::string>> path;  // Path including airports and airlines
+        std::vector<std::pair<Airport, std::string>> path;
         std::string lastAirline;
         int airlineChanges;
     };
@@ -89,7 +89,6 @@ std::vector<std::pair<Airport, std::string>> Search::bfsFindPathWithFilters(
         int currentChanges = currentNode.airlineChanges;
 
         if (currentAirport == dest) {
-            // No need to remove the initial dummy airline entry for the source airport
             return currentNode.path;
         }
 
